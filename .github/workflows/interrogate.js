@@ -41,9 +41,9 @@ const requiredJobs = [
   'header-check',
   'cla/google',
   'director',
-  ...nodePaths.forEach(p => `test (${p})`),
-  ...goPaths.forEach(p => `go-test (${p})`),
-  ...bashPaths.forEach(p => `bash-test (${p})`),
+  ...nodePaths.map(p => `test (${p})`),
+  ...goPaths.map(p => `go-test (${p})`),
+  ...bashPaths.map(p => `bash-test (${p})`),
 ];
 console.log(`::set-output name=nodePaths::${JSON.stringify(nodePaths)}`);
 console.log(`::set-output name=goPaths::${JSON.stringify(goPaths)}`);
