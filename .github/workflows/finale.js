@@ -12,9 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const {request} = require('gaxios');
 const args = process.argv.slice(2);
 const requiredJobs = JSON.parse(args[0]);
-console.log(requiredJobs);
 const runId = process.env.GITHUB_RUN_ID;
-console.log(`Run ID: ${runId}`);
-console.log(process.env);
+const repo = process.env.GITHUB_REPOSITORY;
+const githubToken = args[1];
+
+async function main() {
+  for (;;) {
+    const url = `/repos/${repo}/actions/runs/${runId}/jobs`;
+    const res = await request({
+      url,
+      headers: {
+        authentication: `token ${githubToken}`,
+      }
+    });
+    console.log(res.data);
+    break;
+  }
+}
+main().catch(console.error);
