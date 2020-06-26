@@ -21,7 +21,7 @@ const githubToken = args[1];
 
 async function main() {
   for (;;) {
-    const url = `/repos/${repo}/actions/runs/${runId}/jobs`;
+    const url = `https://api.github.com/repos/${repo}/actions/runs/${runId}/jobs`;
     const res = await request({
       url,
       headers: {
