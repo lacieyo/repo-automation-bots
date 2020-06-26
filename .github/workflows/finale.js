@@ -37,10 +37,19 @@ async function main() {
     console.log(`total count: ${totalCount}`);
     console.log(`required jobs: ${requiredJobs.length}`);
     if (totalCount >= requiredJobs.length) {
-      console.log('We have a total count match!')
-      console.log(requiredJobs);
-      console.log(res.data.jobs.map(x => x.name));
-      return;
+      const successfulJobs = res.data.jobs.filter(job => {
+        return job.status === 'completed' && job.conclusion === 'success';
+      });
+      let completedCount = 0;
+      for (const job of requiredJobs) {
+        if (successfulJobs.includes(job)) {
+          completedCount++;
+        }
+      }
+      console.log(`${completedCount} of ${requiredJobs.length} required jobs complete.`);
+      if (completedCount === requiredJobs.length) {
+        return;
+      }
     }
     await new Promise(r => setTimeout(r, 5000));
   }
