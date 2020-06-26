@@ -15,6 +15,7 @@
 const {execSync} = require('child_process');
 execSync('git fetch origin master');
 const status = execSync('git diff --name-only origin/master', { encoding: 'utf-8'});
+console.log(status);
 const changes = status.split('\n');
 const scopes = new Set();
 for (const change of changes) {
@@ -22,4 +23,5 @@ for (const change of changes) {
     scopes.add(change.split('/')[2]);
   };
 }
+console.log(scopes);
 console.log(`::set-output name=scopes::${JSON.stringify(Array.from(scopes))}`);
