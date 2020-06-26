@@ -34,10 +34,7 @@ for (const change of changes) {
     bashPaths.add('scripts');
   }
 }
-const output = {
-  nodePaths: Array.from(nodePaths),
-  goPaths: Array.from(goPaths),
-  bashPaths: Array.from(bashPaths),
-};
 console.log(output);
-console.log(`::set-output name=scopes::${JSON.stringify(output)}`);
+console.log(`::set-output name=nodePaths::${JSON.stringify(Array.from(nodePaths))}`);
+console.log(`::set-output name=goPaths::${JSON.stringify(Array.from(goPaths))}`);
+console.log(`::set-output name=bashPaths::${JSON.stringify(Array.from(bashPaths))}`);
