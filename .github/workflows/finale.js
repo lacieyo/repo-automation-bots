@@ -20,7 +20,7 @@ const repo = process.env.GITHUB_REPOSITORY;
 const githubToken = args[1];
 
 async function main() {
-  for (;;) {
+  for (let i=0; i<10; i++) {
     const url = `https://api.github.com/repos/${repo}/actions/runs/${runId}/jobs`;
     const res = await request({
       url,
@@ -28,12 +28,13 @@ async function main() {
         authentication: `token ${githubToken}`,
       }
     });
-    const totalCount = res.data.total_count;
     for (const job of res.data.jobs) {
       if (job.status === 'completed' && job.conclusion !== 'success') {
         throw new Error(`Job ${job.name} failed.`);
       }
     }
+    console.log(`total count: ${res.data.total_count}`);
+    console.log(`required jobs: ${requiredJobs.length}`);
     if (totalCount === requiredJobs.length) {
       console.log('We have a total count match!')
       console.log(requiredJobs);
