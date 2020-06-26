@@ -39,7 +39,7 @@ async function main() {
     if (totalCount >= requiredJobs.length) {
       const successfulJobs = res.data.jobs.filter(job => {
         return job.status === 'completed' && job.conclusion === 'success';
-      });
+      }).map(job => job.name);
       let completedCount = 0;
       for (const job of requiredJobs) {
         if (successfulJobs.includes(job)) {
