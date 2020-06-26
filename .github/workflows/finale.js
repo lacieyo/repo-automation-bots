@@ -33,7 +33,8 @@ async function main() {
         throw new Error(`Job ${job.name} failed.`);
       }
     }
-    console.log(`total count: ${res.data.total_count}`);
+    const totalCount = res.data.total_count;
+    console.log(`total count: ${totalCount}`);
     console.log(`required jobs: ${requiredJobs.length}`);
     if (totalCount === requiredJobs.length) {
       console.log('We have a total count match!')
