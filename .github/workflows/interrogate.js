@@ -14,7 +14,7 @@
 
 const {execSync} = require('child_process');
 execSync('git fetch origin master');
-const status = execSync('git diff --name-only master', { encoding: 'utf-8'});
+const status = execSync('git diff --name-only origin/master', { encoding: 'utf-8'});
 const changes = status.split('\n');
 const scopes = new Set();
 for (const change of changes) {
