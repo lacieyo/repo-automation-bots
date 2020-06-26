@@ -20,7 +20,7 @@ const repo = process.env.GITHUB_REPOSITORY;
 const githubToken = args[1];
 
 async function main() {
-  for (let i=0; i<10; i++) {
+  for (;;) {
     const url = `https://api.github.com/repos/${repo}/actions/runs/${runId}/jobs`;
     const res = await request({
       url,
