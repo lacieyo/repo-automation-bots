@@ -38,8 +38,6 @@ nodePaths = Array.from(nodePaths);
 goPaths = Array.from(goPaths);
 bashPaths = Array.from(bashPaths);
 const requiredJobs = [
-  'header-check',
-  'cla/google',
   'director',
   ...nodePaths.map(p => `test (${p})`),
   ...goPaths.map(p => `go-test (${p})`),
