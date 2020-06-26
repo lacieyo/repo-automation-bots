@@ -17,11 +17,27 @@ execSync('git fetch origin master');
 const status = execSync('git diff --name-only origin/master', { encoding: 'utf-8'});
 console.log(status);
 const changes = status.split('\n');
-const scopes = new Set();
+const nodePaths = new Set();
+const goPaths = new Set();
+const bashPaths = new Set();
 for (const change of changes) {
   if (change.startsWith('packages/')) {
-    scopes.add(change.split('/')[1]);
+    nodePaths.add(change.split('/')[1]);
   };
+  if (change.startsWith('packages/buildcop/')) {
+    goPaths.add('packages/buildcop')
+  }
+  if (change.startsWith('serverless-scheduler-proxy/')) {
+    goPaths.add('serverless-scheduler-proxy');
+  }
+  if (change.startsWith('scripts/')) {
+    bashPaths.add('scripts');
+  }
 }
+const output = {
+  nodePaths: Array.from(scopes),
+  goPaths: Array.from(goPaths),
+  bashPaths: Array.from(bashPaths),
+};
 console.log(scopes);
-console.log(`::set-output name=scopes::${JSON.stringify(Array.from(scopes))}`);
+console.log(`::set-output name=scopes::${JSON.stringify(output)}`);

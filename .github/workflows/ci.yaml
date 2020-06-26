@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ${{fromJson(needs.director.outputs.scopes)}}
+        package: ${{fromJson(needs.director.outputs.scopes.nodePaths)}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -40,13 +40,11 @@ jobs:
   go-test:
     name: Go tests
     runs-on: ubuntu-latest
+    needs: director
     strategy:
       fail-fast: false
       matrix:
-        module: [
-          'packages/buildcop',
-          'serverless-scheduler-proxy'
-        ]
+        module: ${{fromJson(needs.director.outputs.scopes.goPaths)}}
     steps:
     - name: Install Go
       uses: actions/setup-go@v2-beta
@@ -68,10 +66,11 @@ jobs:
   bash-test:
     name: Bash tests
     runs-on: ubuntu-latest
+    needs: director
     strategy:
       fail-fast: false
       matrix:
-        module: ["scripts"]
+        module: ${{fromJson(needs.director.outputs.scopes.bashPaths)}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
