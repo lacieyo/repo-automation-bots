@@ -35,9 +35,9 @@ for (const change of changes) {
   }
 }
 const output = {
-  nodePaths: Array.from(scopes),
+  nodePaths: Array.from(nodePaths),
   goPaths: Array.from(goPaths),
   bashPaths: Array.from(bashPaths),
 };
-console.log(scopes);
+console.log(output);
 console.log(`::set-output name=scopes::${JSON.stringify(output)}`);
