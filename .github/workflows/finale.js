@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-console.log(process.argv.slice(2));
-const requiredJobs = JSON.parse(process.argv.slice(2)[0]);
+const args = process.argv.slice(2);
+let [requiredJobs, runId] = args;
+requiredJobs = JSON.parse(requiredJobs);
 console.log(requiredJobs);
+console.log(runId);
