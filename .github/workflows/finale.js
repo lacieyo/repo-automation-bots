@@ -29,7 +29,22 @@ async function main() {
       }
     });
     console.log(res.data);
-    break;
+    const totalCount = res.data.total_count;
+    console.log(`Total count: ${totalCount}`);
+    if (totalCount === requiredJobs.length) {
+      console.log('We have a total count match!')
+      return;
+    }
+    for (const job of res.data.jobs) {
+      if (job.status === 'completed' && job.conclusion !== 'success') {
+        throw new Error(`Job ${job.name} failed.`);
+      }
+    }
+    await new Promise(setTimeout(r, 5000));
   }
 }
-main().catch(console.error);
+main().catch(err => {
+  console.log(`::error ${err.message}`);
+  console.error(err);
+  process.exitCode = -1;
+});
