@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ${{fromJson(needs.director.outputs.scopes.nodePaths)}}
+        package: ${{fromJson(needs.director.outputs.scopes).nodePaths}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: ${{fromJson(needs.director.outputs.scopes.goPaths)}}
+        module: ${{fromJson(needs.director.outputs.scopes).goPaths}}
     steps:
     - name: Install Go
       uses: actions/setup-go@v2-beta
@@ -70,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: ${{fromJson(needs.director.outputs.scopes.bashPaths)}}
+        module: ${{fromJson(needs.director.outputs.scopes).bashPaths}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
