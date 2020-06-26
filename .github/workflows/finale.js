@@ -36,7 +36,7 @@ async function main() {
     const totalCount = res.data.total_count;
     console.log(`total count: ${totalCount}`);
     console.log(`required jobs: ${requiredJobs.length}`);
-    if (totalCount === requiredJobs.length) {
+    if (totalCount >= requiredJobs.length) {
       console.log('We have a total count match!')
       console.log(requiredJobs);
       console.log(res.data.jobs.map(x => x.name));
