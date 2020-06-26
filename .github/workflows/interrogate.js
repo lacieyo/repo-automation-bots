@@ -20,7 +20,7 @@ const changes = status.split('\n');
 const scopes = new Set();
 for (const change of changes) {
   if (change.startsWith('packages/')) {
-    scopes.add(change.split('/')[2]);
+    scopes.add(change.split('/')[1]);
   };
 }
 console.log(scopes);
