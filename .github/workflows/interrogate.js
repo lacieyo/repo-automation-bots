@@ -34,6 +34,15 @@ for (const change of changes) {
     bashPaths.add('scripts');
   }
 }
+const requiredJobs = [
+  'header-check',
+  'cla/google',
+  'director',
+  ...nodePaths.forEach(p => `test (${p})`),
+  ...goPaths.forEach(p => `go-test (${p})`),
+  ...bashPaths.forEach(p => `bash-test (${p})`),
+];
 console.log(`::set-output name=nodePaths::${JSON.stringify(Array.from(nodePaths))}`);
 console.log(`::set-output name=goPaths::${JSON.stringify(Array.from(goPaths))}`);
 console.log(`::set-output name=bashPaths::${JSON.stringify(Array.from(bashPaths))}`);
+console.log(`::set-output name=requiredJobs::${JSON.stringify(requiredJobs)}`);
