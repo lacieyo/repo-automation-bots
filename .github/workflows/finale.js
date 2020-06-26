@@ -12,5 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-console.log(process.env);
-console.log(process.argv);
+console.log(process.argv.slice(2));
+const requiredJobs = JSON.parse(process.argv.slice(2)[0]);
+console.log(requiredJobs);
