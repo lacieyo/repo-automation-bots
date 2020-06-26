@@ -17,9 +17,9 @@ execSync('git fetch origin master');
 const status = execSync('git diff --name-only origin/master', { encoding: 'utf-8'});
 console.log(status);
 const changes = status.split('\n');
-const nodePaths = new Set();
-const goPaths = new Set();
-const bashPaths = new Set();
+let nodePaths = new Set();
+let goPaths = new Set();
+let bashPaths = new Set();
 for (const change of changes) {
   if (change.startsWith('packages/')) {
     nodePaths.add(change.split('/')[1]);
@@ -34,6 +34,9 @@ for (const change of changes) {
     bashPaths.add('scripts');
   }
 }
+nodePaths = Array.from(nodePaths);
+goPaths = Array.from(goPaths);
+bashPaths = Array.from(bashPaths);
 const requiredJobs = [
   'header-check',
   'cla/google',
@@ -42,7 +45,7 @@ const requiredJobs = [
   ...goPaths.forEach(p => `go-test (${p})`),
   ...bashPaths.forEach(p => `bash-test (${p})`),
 ];
-console.log(`::set-output name=nodePaths::${JSON.stringify(Array.from(nodePaths))}`);
-console.log(`::set-output name=goPaths::${JSON.stringify(Array.from(goPaths))}`);
-console.log(`::set-output name=bashPaths::${JSON.stringify(Array.from(bashPaths))}`);
+console.log(`::set-output name=nodePaths::${JSON.stringify(nodePaths)}`);
+console.log(`::set-output name=goPaths::${JSON.stringify(goPaths)}`);
+console.log(`::set-output name=bashPaths::${JSON.stringify(bashPaths)}`);
 console.log(`::set-output name=requiredJobs::${JSON.stringify(requiredJobs)}`);
