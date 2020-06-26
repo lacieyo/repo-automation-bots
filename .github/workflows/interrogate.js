@@ -44,7 +44,9 @@ const requiredJobs = [
   ...nodePaths.map(p => `test (${p})`),
   ...goPaths.map(p => `go-test (${p})`),
   ...bashPaths.map(p => `bash-test (${p})`),
+  'finale',
 ];
+console.log(nodePaths, '\n', goPaths, '\n', bashPaths, '\n', requiredJobs);
 console.log(`::set-output name=nodePaths::${JSON.stringify(nodePaths)}`);
 console.log(`::set-output name=goPaths::${JSON.stringify(goPaths)}`);
 console.log(`::set-output name=bashPaths::${JSON.stringify(bashPaths)}`);
