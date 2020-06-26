@@ -87,4 +87,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: npm install
       - run: node ./.github/workflows/finale.js '${{needs.director.outputs.requiredJobs}}' ${{secrets.GITHUB_TOKEN}}
