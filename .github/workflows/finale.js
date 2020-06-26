@@ -13,3 +13,4 @@
 // limitations under the License.
 
 console.log(process.env);
+console.log(process.argv);

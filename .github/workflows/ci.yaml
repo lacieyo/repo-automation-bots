@@ -87,6 +87,4 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: node ./.github/workflows/finale.js
-        with:
-          requiredJobs: ${{needs.director.outputs.requiredJobs}}
+      - run: node ./.github/workflows/finale.js ${{needs.director.outputs.requiredJobs}}
