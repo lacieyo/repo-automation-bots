@@ -16,4 +16,5 @@ const args = process.argv.slice(2);
 const requiredJobs = JSON.parse(args[0]);
 console.log(requiredJobs);
 const runId = process.env.GITHUB_RUN_ID;
-console.log(runId);
+console.log(`Run ID: ${runId}`);
+console.log(process.env);
