@@ -48,12 +48,13 @@ func main() {
 	logsDir := flag.String("logs_dir", ".", "The directory to look for logs in. Defaults to current directory.")
 	commit := flag.String("commit_hash", "", "Long form commit hash this build is being run for. Defaults to the KOKORO_GIT_COMMIT environment variable.")
 	serviceAccount := flag.String("service_account", "", "Path to service account to use instead of Trampoline default or client library auto-detection.")
+	buildURL := flag.String("build_url", "", "Build URL (markdown OK). Defaults to detect from Kokoro.")
 
 	flag.Parse()
 
 	log.Println("Sending logs to Build Cop Bot...")
 	log.Println("See https://github.com/googleapis/repo-automation-bots/tree/master/packages/buildcop.")
-	if ok := publish(*projectID, *topicID, *repo, *installationID, *commit, *logsDir, *serviceAccount); !ok {
+	if ok := publish(*projectID, *topicID, *repo, *installationID, *commit, *logsDir, *serviceAccount, *buildURL); !ok {
 		os.Exit(1)
 	}
 	log.Println("Done!")
@@ -76,7 +77,7 @@ type message struct {
 
 // publish searches for sponge_log.xml files and publishes them to Pub/Sub.
 // publish logs a message and returns false if there was an error.
-func publish(projectID, topicID, repo, installationID, commit, logsDir, serviceAccount string) (ok bool) {
+func publish(projectID, topicID, repo, installationID, commit, logsDir, serviceAccount, buildURL string) (ok bool) {
 	ctx := context.Background()
 
 	opts := []option.ClientOption{}
@@ -131,8 +132,19 @@ See https://github.com/apps/build-cop-bot/.`)
 		}
 	}
 
+	if buildURL == "" {
+		buildID := os.Getenv("KOKORO_BUILD_ID")
+		if buildID == "" {
+			log.Printf(`Unable to build URL (expected the KOKORO_BUILD_ID env var).
+Please set --build_url to the URL of the build.
+See https://github.com/apps/build-cop-bot/.`)
+			return false
+		}
+		buildURL = fmt.Sprintf("[Build Status](https://source.cloud.google.com/results/invocations/%s), [Sponge](http://sponge2/%s)", os.Getenv("KOKORO_BUILD_ID"), os.Getenv("KOKORO_BUILD_ID"))
+	}
+
 	// Handle logs in the current directory.
-	if err := filepath.Walk(logsDir, processLog(ctx, repo, installationID, commit, topic)); err != nil {
+	if err := filepath.Walk(logsDir, processLog(ctx, repo, installationID, commit, buildURL, topic)); err != nil {
 		log.Printf("Error publishing logs: %v", err)
 		return false
 	}
@@ -173,7 +185,7 @@ func detectInstallationID(repo string) string {
 }
 
 // processLog is used to process log files and publish them to Pub/Sub.
-func processLog(ctx context.Context, repo, installationID, commit string, topic *pubsub.Topic) filepath.WalkFunc {
+func processLog(ctx context.Context, repo, installationID, commit, buildURL string, topic *pubsub.Topic) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -186,7 +198,6 @@ func processLog(ctx context.Context, repo, installationID, commit string, topic 
 			return fmt.Errorf("ioutil.ReadFile(%q): %v", path, err)
 		}
 		enc := base64.StdEncoding.EncodeToString(data)
-		buildURL := fmt.Sprintf("[Build Status](https://source.cloud.google.com/results/invocations/%s), [Sponge](http://sponge2/%s)", os.Getenv("KOKORO_BUILD_ID"), os.Getenv("KOKORO_BUILD_ID"))
 		msg := message{
 			Name:         "buildcop",
 			Type:         "function",
